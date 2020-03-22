@@ -17,6 +17,9 @@ import android.view.SurfaceHolder;
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     CharacterSprite characterSprite;
     private  MainThread thread;
+    ObstacleSprite pipe1;
+    ObstacleSprite pipe2;
+    ObstacleSprite pipe3;
 
     public static int characterSpriteWidth = 210;
     public static int characterSpriteHeight = 180;
@@ -24,7 +27,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 //    TODO: decrease gapHeight over time for increased difficulty
     public static int gapHeight = 400;
 //    TODO: increase velocity over time for increased difficulty
-    public static int velocity = 10;
+    public static int velocity = 5;
 
     public GameView(Context context) {
 
@@ -47,8 +50,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         matrix.postScale(scaleWidth, scaleHeight);
 
         // "RECREATE" THE NEW BITMAP
-        Bitmap resizedBitmap =
-                Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
         bm.recycle();
         return resizedBitmap;
     }
@@ -56,21 +58,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         characterSprite = new CharacterSprite(getResizedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.trumpresize), characterSpriteWidth, characterSpriteHeight));
-        makeLevel();
-        thread.setRunning(true);
-        thread.start();
-    }
-
-    public void makeLevel() {
         Bitmap bmp;
         Bitmap bmp2;
         int y, x;
-        bmp = getResizedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.pipe_down_media), 500, Resources.getSystem().getDisplayMetrics().heightPixels / 2);
-        bmp2 = getResizedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.pipe_up_media), 500, Resources.getSystem().getDisplayMetrics().heightPixels / 2);
+        bmp = getResizedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.news_recording), 200, Resources.getSystem().getDisplayMetrics().heightPixels / 5);
+//        bmp2 = getResizedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.pipe_up_media), 150, Resources.getSystem().getDisplayMetrics().heightPixels / 2);
 
-        ObstacleSprite pipe1 = new ObstacleSprite(bmp, bmp2, 0, 2000);
-        ObstacleSprite pipe2 = new ObstacleSprite(bmp, bmp2, -250, 3200);
-        ObstacleSprite pipe3 = new ObstacleSprite(bmp, bmp2, 250, 4500);
+        pipe1 = new ObstacleSprite(bmp, 150, 100);
+        pipe2 = new ObstacleSprite(bmp, 800, 500);
+        pipe3 = new ObstacleSprite(bmp, 2000, 120);
+        thread.setRunning(true);
+        thread.start();
     }
 
     @Override
@@ -101,6 +99,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update(){
         characterSprite.update();
+        pipe1.update();
+        pipe2.update();
+        pipe3.update();
     }
 
     @Override
@@ -108,6 +109,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         super.draw(canvas);
         if (canvas != null) {
             canvas.drawColor(Color.WHITE);
+            pipe1.draw(canvas);
+            pipe2.draw(canvas);
+            pipe3.draw(canvas);
             characterSprite.draw(canvas);
         }
     }
