@@ -80,9 +80,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public boolean onTouchEvent(MotionEvent event) {
         Log.i("\n*ON TOUCH EVENT", String.valueOf(event.getAction()));
         characterSprite.y = characterSprite.y - (characterSprite.yVelocity * 25);
-        Log.i("\n*ON TOUCH ", String.valueOf(characterSprite.y));
-
-
         return super.onTouchEvent(event);
     }
 
