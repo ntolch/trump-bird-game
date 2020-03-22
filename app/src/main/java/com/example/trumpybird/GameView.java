@@ -1,6 +1,7 @@
 package com.example.trumpybird;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -20,7 +21,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public static int characterSpriteWidth = 210;
     public static int characterSpriteHeight = 180;
 
+//    TODO: decrease gapHeight over time for increased difficulty
     public static int gapHeight = 400;
+//    TODO: increase velocity over time for increased difficulty
     public static int velocity = 10;
 
     public GameView(Context context) {
@@ -53,8 +56,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         characterSprite = new CharacterSprite(getResizedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.trumpresize), characterSpriteWidth, characterSpriteHeight));
+        makeLevel();
         thread.setRunning(true);
         thread.start();
+    }
+
+    public void makeLevel() {
+        Bitmap bmp;
+        Bitmap bmp2;
+        int y, x;
+        bmp = getResizedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.pipe_down_media), 500, Resources.getSystem().getDisplayMetrics().heightPixels / 2);
+        bmp2 = getResizedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.pipe_up_media), 500, Resources.getSystem().getDisplayMetrics().heightPixels / 2);
+
+        ObstacleSprite pipe1 = new ObstacleSprite(bmp, bmp2, 0, 2000);
+        ObstacleSprite pipe2 = new ObstacleSprite(bmp, bmp2, -250, 3200);
+        ObstacleSprite pipe3 = new ObstacleSprite(bmp, bmp2, 250, 4500);
     }
 
     @Override
