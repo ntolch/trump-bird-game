@@ -8,9 +8,10 @@ public class ObstacleSprite {
 
     private Bitmap image;
     private Bitmap image2;
-    public int xX, yY;
+    public int xX;
+    public int yY;
     private int xVelocity = 10;
-    private int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+//    private int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
 
     public ObstacleSprite (Bitmap bmp, int x, int y) {
         image = bmp;
@@ -20,7 +21,7 @@ public class ObstacleSprite {
     }
 
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(image, xX, -(GameView.gapHeight / 2) + yY, null);
+        canvas.drawBitmap(image, xX, yY,null);
 //        canvas.drawBitmap(image2, xX, ((screenHeight / 2) + (GameView.gapHeight / 2)) + yY, null);
     }
     public void update() {

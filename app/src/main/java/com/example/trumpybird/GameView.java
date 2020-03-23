@@ -13,20 +13,37 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     CharacterSprite characterSprite;
     private  MainThread thread;
-    ObstacleSprite pipe1;
-    ObstacleSprite pipe2;
-    ObstacleSprite pipe3;
+    ObstacleSprite obstacle1;
+    ObstacleSprite obstacle2;
+    ObstacleSprite obstacle3;
+    ArrayList<ObstacleSprite> obstacles = new ArrayList();
+
 
     public static int characterSpriteWidth = 210;
     public static int characterSpriteHeight = 180;
 
-//    TODO: decrease gapHeight over time for increased difficulty
-    public static int gapHeight = 400;
-//    TODO: increase velocity over time for increased difficulty
+    public static int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+    public static int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+
+    public static int obstacleWidth = 200;
+    public static int obstacleHeight = screenHeight / 5;
+
+
+/*
+     TODO: obstacles to add: global warming, Roseanne Barr, specific journalists
+     TODO: add points for passing each obstacle
+     TODO: add points for running into Putin (put glow around bonus points like Putin and money)
+    */
+
+    //    TODO: increase velocity over time for increased difficulty
     public static int velocity = 5;
 
     public GameView(Context context) {
@@ -61,12 +78,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         Bitmap bmp;
         Bitmap bmp2;
         int y, x;
-        bmp = getResizedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.news_recording), 200, Resources.getSystem().getDisplayMetrics().heightPixels / 5);
+        bmp = getResizedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.news_recording), obstacleWidth, obstacleHeight);
 //        bmp2 = getResizedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.pipe_up_media), 150, Resources.getSystem().getDisplayMetrics().heightPixels / 2);
 
-        pipe1 = new ObstacleSprite(bmp, 150, 100);
-        pipe2 = new ObstacleSprite(bmp, 800, 500);
-        pipe3 = new ObstacleSprite(bmp, 2000, 120);
+        obstacle1 = new ObstacleSprite(bmp, 150, 100);
+        obstacle2 = new ObstacleSprite(bmp, 800, 500);
+        obstacle3 = new ObstacleSprite(bmp, 2000, 120);
+
+        obstacles.add(obstacle1);
+        obstacles.add(obstacle2);
+        obstacles.add(obstacle3);
         thread.setRunning(true);
         thread.start();
     }
@@ -97,11 +118,52 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         return super.onTouchEvent(event);
     }
 
+    public void logic() {
+        ArrayList<ObstacleSprite> obstacles = new ArrayList();
+        obstacles.add(obstacle1);
+        obstacles.add(obstacle2);
+        obstacles.add(obstacle3);
+        Log.i("\n\n*Obstacle List 1", obstacles.get(0).toString());
+
+        for (int i = 0; i < obstacles.size(); i++) {
+            //Detect if the character is touching one of the pipes
+            if (characterSprite.y < obstacles.get(i).yY + obstacleHeight
+                    && characterSprite.x + characterSpriteWidth > obstacles.get(i).xX
+                    && characterSprite.x < obstacles.get(i).xX + obstacleWidth) {
+                resetLevel();
+            } else if (characterSprite.y + characterSpriteHeight > obstacles.get(i).yY
+                    && characterSprite.x + characterSpriteHeight > obstacles.get(i).xX
+                    && characterSprite.x < obstacles.get(i).xX + obstacleWidth) {
+                resetLevel();
+            }
+
+            //Detect if the pipe has gone off the left of the
+            //screen and regenerate further ahead
+            if (obstacles.get(i).xX + obstacleWidth < 0) {
+                Random r = new Random();
+                int value1 = r.nextInt(500);
+                int value2 = r.nextInt(screenHeight);
+                obstacles.get(i).xX = screenWidth + value1 + 1000;
+                obstacles.get(i).yY = value2 + 150;
+            }
+        }
+
+        //Detect if the character has gone off the
+        //bottom or top of the screen
+        if (characterSprite.y + 240 < 0) {
+            resetLevel(); }
+        if (characterSprite.y > screenHeight) {
+            resetLevel(); }
+    }
+
+    public void resetLevel() {
+        Log.i("\n\n*RESET", "bumped into obstacle");
+    }
+
     public void update(){
+        logic();
         characterSprite.update();
-        pipe1.update();
-        pipe2.update();
-        pipe3.update();
+        for (ObstacleSprite obstacle : obstacles) { obstacle.update(); }
     }
 
     @Override
@@ -109,9 +171,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         super.draw(canvas);
         if (canvas != null) {
             canvas.drawColor(Color.WHITE);
-            pipe1.draw(canvas);
-            pipe2.draw(canvas);
-            pipe3.draw(canvas);
+            for (ObstacleSprite obstacle : obstacles) { obstacle.draw(canvas); }
             characterSprite.draw(canvas);
         }
     }
