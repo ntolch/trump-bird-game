@@ -4,6 +4,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
+import java.util.Random;
+
 public class CharacterSprite {
 
     private Bitmap image;
@@ -15,8 +17,13 @@ public class CharacterSprite {
 
     public CharacterSprite(Bitmap bmp) {
         image = bmp;
+        this.y = getRandomY();
         x = 100;
-        y = 100;
+    }
+
+    public int getRandomY() {
+        Random r = new Random();
+        return r.nextInt(150);
     }
 
     public void draw(Canvas canvas) {

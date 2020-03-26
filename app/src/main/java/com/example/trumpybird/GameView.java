@@ -75,11 +75,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         characterSprite = new CharacterSprite(getResizedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.trumpresize), characterSpriteWidth, characterSpriteHeight));
+        Log.i("\n\n**NEW HEAD CREATED", String.valueOf(characterSprite.getRandomY()));
+
         Bitmap bmp;
-        Bitmap bmp2;
-        int y, x;
         bmp = getResizedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.news_recording), obstacleWidth, obstacleHeight);
-//        bmp2 = getResizedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.pipe_up_media), 150, Resources.getSystem().getDisplayMetrics().heightPixels / 2);
 
         obstacle1 = new ObstacleSprite(bmp, 150, 100);
         obstacle2 = new ObstacleSprite(bmp, 800, 500);
@@ -123,7 +122,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         obstacles.add(obstacle1);
         obstacles.add(obstacle2);
         obstacles.add(obstacle3);
-        Log.i("\n\n*Obstacle List 1", obstacles.get(0).toString());
 
         for (int i = 0; i < obstacles.size(); i++) {
             //Detect if the character is touching one of the pipes
@@ -148,9 +146,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
 
-        //Detect if the character has gone off the
-        //bottom or top of the screen
-        if (characterSprite.y + 240 < 0) {
+        //Detect if the character has gone off the top or below the bottom of the screen
+        if (characterSprite.y + characterSpriteHeight + 50 < 0) {
             resetLevel(); }
         if (characterSprite.y > screenHeight) {
             resetLevel(); }
@@ -162,6 +159,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update(){
         logic();
+        Log.i("\n\n**NEW HEAD update", String.valueOf(characterSprite.getRandomY()));
         characterSprite.update();
         for (ObstacleSprite obstacle : obstacles) { obstacle.update(); }
     }
