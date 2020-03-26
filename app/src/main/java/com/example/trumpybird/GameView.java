@@ -47,7 +47,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public static int velocity = 5;
 
     public GameView(Context context) {
-
         super(context);
 
         getHolder().addCallback(this);
@@ -80,9 +79,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         Bitmap bmp;
         bmp = getResizedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.news_recording), obstacleWidth, obstacleHeight);
 
-        obstacle1 = new ObstacleSprite(bmp, 150, 100);
-        obstacle2 = new ObstacleSprite(bmp, 800, 500);
-        obstacle3 = new ObstacleSprite(bmp, 2000, 120);
+        obstacle1 = new ObstacleSprite(bmp);
+        obstacle2 = new ObstacleSprite(bmp);
+        obstacle3 = new ObstacleSprite(bmp);
 
         obstacles.add(obstacle1);
         obstacles.add(obstacle2);
@@ -153,6 +152,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void resetLevel() {
         Log.i("\n\n*RESET", "bumped into obstacle");
+        characterSprite.y = characterSprite.getRandomY();
+        obstacle1.getRandomX();
+        obstacle1.getRandomY();
+        obstacle2.getRandomX();
+        obstacle2.getRandomY();
+        obstacle3.getRandomX();
+        obstacle3.getRandomY();
     }
 
     public void update(){
