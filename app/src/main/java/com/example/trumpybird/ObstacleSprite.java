@@ -1,29 +1,23 @@
 package com.example.trumpybird;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 public class ObstacleSprite {
 
     private Bitmap image;
-    private Bitmap image2;
-    public int xX;
-    public int yY;
-    private int xVelocity = 10;
-//    private int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+    public int xX, yY;
 
     public ObstacleSprite (Bitmap bmp, int x, int y) {
         image = bmp;
-//        image2 = bmp2;
         yY = y;
         xX = x;
     }
 
     public void draw(Canvas canvas) {
         canvas.drawBitmap(image, xX, yY,null);
-//        canvas.drawBitmap(image2, xX, ((screenHeight / 2) + (GameView.gapHeight / 2)) + yY, null);
     }
+
     public void update() {
         xX -= GameView.velocity;
     }

@@ -113,7 +113,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         Log.i("\n*ON TOUCH EVENT", String.valueOf(event.getAction()));
-        characterSprite.y = characterSprite.y - (characterSprite.yVelocity * 25);
+        characterSprite.y = characterSprite.y - (characterSprite.yVelocity * 22);
         return super.onTouchEvent(event);
     }
 
@@ -147,10 +147,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         //Detect if the character has gone off the top or below the bottom of the screen
-        if (characterSprite.y + characterSpriteHeight + 50 < 0) {
-            resetLevel(); }
-        if (characterSprite.y > screenHeight) {
-            resetLevel(); }
+        if (characterSprite.y + characterSpriteHeight + 50 < 0) { resetLevel(); }
+        if (characterSprite.y > screenHeight - characterSpriteHeight) { resetLevel(); }
     }
 
     public void resetLevel() {

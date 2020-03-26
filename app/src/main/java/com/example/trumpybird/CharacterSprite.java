@@ -11,9 +11,8 @@ public class CharacterSprite {
 
     private Bitmap image;
     public int x, y;
-    private int xVelocity = 5;
     public int yVelocity = 5;
-    private int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+    private int charHeight = GameView.characterSpriteHeight;
     private int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
 
     public CharacterSprite(Bitmap bmp) {
@@ -24,8 +23,6 @@ public class CharacterSprite {
 
     public int getRandomY() {
         Random r = new Random();
-        int charHeight = GameView.characterSpriteHeight;
-        int screenHeight = GameView.screenHeight;
         return r.nextInt((screenHeight - (charHeight * 2)) + charHeight);
     }
 
@@ -34,13 +31,7 @@ public class CharacterSprite {
     }
 
     public void update() {
-//        x += xVelocity;
         y += yVelocity;
-        if ((x > screenWidth - image.getWidth()) || (x < 0)) {
-            xVelocity = xVelocity *- 1;
-        }
-        if ((y > screenHeight - image.getHeight()) || (y < 0)) {
-            yVelocity = yVelocity *- 1;
-        }
+        if ((y < 0)) { yVelocity = yVelocity *- 1; }
     }
 }
