@@ -3,6 +3,7 @@ package com.example.trumpybird;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.util.Log;
 
 import java.util.Random;
 
@@ -23,7 +24,9 @@ public class CharacterSprite {
 
     public int getRandomY() {
         Random r = new Random();
-        return r.nextInt(150);
+        int charHeight = GameView.characterSpriteHeight;
+        int screenHeight = GameView.screenHeight;
+        return r.nextInt((screenHeight - (charHeight * 2)) + charHeight);
     }
 
     public void draw(Canvas canvas) {
